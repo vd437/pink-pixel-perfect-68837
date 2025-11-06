@@ -1,11 +1,15 @@
 import { useState, useRef, KeyboardEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ArrowLeft, HelpCircle } from "lucide-react";
 
 const Verify = () => {
+  const location = useLocation();
   const [codes, setCodes] = useState<string[]>(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState(53);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  
+  const contact = location.state?.contact || "";
+  const type = location.state?.type || "email";
 
   const handleInputChange = (index: number, value: string) => {
     if (value.length <= 1 && /^\d*$/.test(value)) {
@@ -41,10 +45,12 @@ const Verify = () => {
 
       {/* Content */}
       <div className="flex-1 px-6 pt-6">
-        <h2 className="mb-2 text-2xl font-bold">Verify email</h2>
-        <p className="mb-6 text-sm text-muted-foreground">
-          Use the link or enter the code sent to tameryiusefyousef@gmail.com
-        </p>
+        <h2 className="mb-2 text-2xl font-bold">Verify {type}</h2>
+        {contact && (
+          <p className="mb-6 text-sm text-muted-foreground">
+            Enter the code sent to {contact}
+          </p>
+        )}
 
         {/* Code Inputs */}
         <div className="mb-6 flex justify-center gap-2 sm:gap-3">

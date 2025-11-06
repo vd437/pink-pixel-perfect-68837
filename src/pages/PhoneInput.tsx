@@ -24,6 +24,8 @@ const PhoneInput = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<"phone" | "email">("phone");
   const [selectedCountry, setSelectedCountry] = useState({ name: "US", code: "+1" });
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [emailOrUsername, setEmailOrUsername] = useState("");
 
   useEffect(() => {
     if (location.state?.selectedCountry) {
@@ -83,6 +85,8 @@ const PhoneInput = () => {
             <Input
               type="tel"
               placeholder="Phone number"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
               className="flex-1 h-12 border-0 bg-transparent text-base placeholder:text-muted-foreground focus-visible:ring-0"
             />
           </div>
@@ -90,6 +94,8 @@ const PhoneInput = () => {
           <Input
             type="text"
             placeholder="Email or Username"
+            value={emailOrUsername}
+            onChange={(e) => setEmailOrUsername(e.target.value)}
             className="h-12 rounded-lg bg-muted border-0 text-base placeholder:text-muted-foreground focus-visible:ring-0"
           />
         )}
@@ -97,11 +103,19 @@ const PhoneInput = () => {
 
       {/* Footer Button */}
       <div className="p-6">
-        <Link to="/verify" className="block">
-          <Button variant="tiktok" size="xl" className="w-full">
-            Continue
-          </Button>
-        </Link>
+        <Button 
+          variant="tiktok" 
+          size="xl" 
+          className="w-full"
+          onClick={() => {
+            const contact = activeTab === "phone" 
+              ? `${selectedCountry.code} ${phoneNumber}`
+              : emailOrUsername;
+            navigate('/verify', { state: { contact, type: activeTab } });
+          }}
+        >
+          Continue
+        </Button>
       </div>
     </div>
   );
